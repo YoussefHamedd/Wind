@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>VorteX</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+ 
+  <link href="" rel="icon">
+  <link href="" rel="apple-touch-icon">
+
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+  
+  <link href="{{url_for('static' ,filename='css/bootstrap.min.css')}}" rel="stylesheet">
+  <link href="{{url_for('static' ,filename='css/bootstrap-icons.css')}}" rel="stylesheet">
+  <link href="{{url_for('static' ,filename='css/aos.css')}}" rel="stylesheet">
+  <link href="{{url_for('static' ,filename='css/glightbox.min.css')}}" rel="stylesheet">
+  <link href="{{url_for('static' ,filename='css/swiper-bundle.min.css')}}" rel="stylesheet">
+  <link href="{{url_for('static' ,filename='css/remixicon.css')}}" rel="stylesheet">
+
+  <link href="{{url_for('static' ,filename='css/main.css')}}" rel="stylesheet">
+
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <!-- fontawesome cdn -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- owl carousel -->
+  <link rel = "stylesheet" href = "{{url_for('static' ,filename='css/owl.carousel.css')}}">
+  <link rel = "stylesheet" href = "{{url_for('static' ,filename='css/owl.theme.default.css')}}">
+  <!-- custom css -->
+  <link rel = "stylesheet" href = "{{url_for('static' ,filename='css/styleowl.css')}}">
+
+    <style>
+        .product-image {
+            max-width: 100%; /* Ensure the image doesn't exceed its container's width */
+            height: auto;    /* Maintain the image's aspect ratio */
+            max-height: 210px; /* Set a fixed maximum height for consistency */
+            width: 100%;     /* Ensure the image takes up the full width of its container */
+            }
+
+    </style>
+
+
+
+</head>
+
+<body class="page-portfolio">
+
+ 
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+
+      <a href="/" class="logo d-flex align-items-center">
+        
+        <img src="{{url_for('static' ,filename='img/pngwing.com.png')}}" class="img-fluid" alt="" >
+      </a>
+
+      <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+      <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a href="/" >Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/service">Forcast</a></li>
+          <li><a href="/products" class="active">Products</a></li>
+          <li><a href="/contact">Contact</a></li>
+          {% if current_user.is_authenticated %}
+                <li><a href="{{url_for('customerLogout')}}">Log Out</a></li>
+          {% else %}
+                <li><a href="/customer/login">Log In</a></li>
+          {% endif %}
+          {% if current_user.is_authenticated %}
+          <li><a href="{{url_for('get_cart')}}">Cart({{session['shopcart']|length}})</a></li>
+          {% endif %}
+        </ul>
+            
+      </nav>
+
+    </div>
+  </header>
+
+  <main id="main">
+
+    
+    <div class="breadcrumbs d-flex align-items-center" style="background-image: url({{ url_for('static', filename='img/portfolio-header.jpg') }})">
+      <div class="container position-relative d-flex flex-column align-items-center">
+
+        <h2>Products</h2>
+        <ol>
+          <li><a href="/">Home</a></li>
+          <li>Products</li>
+        </ol>
+
+      </div>
+    </div>
+
+   
+  <section id="portfolio" class="portfolio">
+    <div class="container" data-aos="fade-up">
+        <div class="portfolio-isotope" data-portfolio-filter="*" data-portfolio-layout="masonry" data-portfolio-sort="original-order">
+            {% block body_block %}
+             <div class = "container">
+        <div class = "row my-5">
+            <h1 class = "text-center">Featured Products</h1>
+            <p class = "fw-light w-75 mx-auto text-center">Welcome</p>
+        </div>
+
+        <div class = "row g-4 my-5 mx-auto owl-carousel owl-theme">
+            {% for product in products.items %}
+            <div class = "col product-item mx-auto">
+                <div class = "product-img">
+                    <img src="{{url_for('static', filename='images/'+product.image_1)}}" alt = "{{product.name}}" class = "img-fluid d-block mx-auto ">
+                    <span class = "heart-icon">
+                        <i class = "far fa-heart"></i>
+                    </span>
+                    {% if current_user.is_authenticated %}
+                    <div class = "row btns w-100 mx-auto text-center">
+                      <form action="{{url_for('add_cart')}}" method="post">
+                         <input type="hidden" name="product_id" value="{{product.id}}">
+                         <button type="submit" class = "col-6 py-2">
+                              <i class = "fa fa-cart-plus"></i> Add to Cart
+                         </button>
+                         <input type="hidden" name="quantity" id='' value="1" min="1" max="{{product.stock}}">
+                      </form>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class = "product-info p-3">
+                    <span  class = "product-type">{{product.brand.name}}</span>
+                    <a href="{{url_for('product_details', id=product.id)}}" class = "d-block text-dark text-decoration-none py-2 product-name">{{product.name}}</a>
+                    <span class = "product-price">${{product.price}}</span>
+                    <div class = "rating d-flex mt-1">
+                        <span>
+                            <i class = "fa fa-star"></i>
+                        </span>
+                        <span>
+                            <i class = "fa fa-star"></i>
+                        </span>
+                        <span>
+                            <i class = "fa fa-star"></i>
+                        </span>
+                        <span>
+                            <i class = "fa fa-star"></i>
+                        </span>
+                        <span>
+                            <i class = "fa fa-star"></i>
+                        </span>
+                        <span>(25 reviews)</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+        </div>
+            {% endblock body_block %}
+    </div>
+  </section>
+
+
+  </main>
+
+  <footer id="footer" class="footer">
+
+    <div class="footer-content">
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-lg-5 col-md-12 footer-info">
+            <a href="/" class="logo d-flex align-items-center">
+              <span>Wind Power Forcasting</span>
+            </a>
+            <p>Explore the world of wind power with our forecasting website! <br>
+              Our aim is to contribute to a cleaner future by providing reliable insights and solutions. 
+            <div class="social-links d-flex  mt-3">
+              <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+              <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+              <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+              <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bi bi-dash"></i> <a href="/">Home</a></li>
+              <li><i class="bi bi-dash"></i> <a href="/about">About us</a></li>
+              <li><i class="bi bi-dash"></i> <a href="/service">Services</a></li>
+              <li><i class="bi bi-dash"></i> <a href="/contact">Contact</a></li>
+            </ul>
+          </div>  
+
+          <div class="col-lg-2 col-6 footer-links">
+            <h4>Our Services</h4>
+            <ul>
+              <li><i class="bi bi-dash"></i> <a href="#">Power Wind <br> Equipement
+                Retail</a></li>
+              <li><i class="bi bi-dash"></i> <a href="#">Installation Service</a></li>
+              <li><i class="bi bi-dash"></i> <a href="#">Repair and Maintenance</a></li>
+              
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+            <h4>Contact Us</h4>
+            <p> Tek-Up
+                Ariana,<br>
+              Tunisia <br>
+              <strong>Phone:</strong> +216 25 488 535<br>
+              <strong>Email:</strong> Wind@tek-up.com<br>
+            </p>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-legal">
+      <div class="container">
+        <div class="copyright">
+          &copy; Copyright <strong><span>Wind Power Forcasting Group</span></strong>. All Rights Reserved
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <div id="preloader"></div>
+
+  
+  <script src="{{url_for('static' ,filename='js/bootstrap.bundle.min.js')}}"></script>
+  <script src="{{url_for('static' ,filename='js/aos.js')}}"></script>
+  <script src="{{url_for('static' ,filename='js/glightbox.min.js')}}"></script>
+  <script src="{{url_for('static' ,filename='js/swiper-bundle.min.js')}}"></script>
+  <script src="{{url_for('static' ,filename='js/isotope.pkgd.min.js')}}"></script>
+  <script src="{{url_for('static' ,filename='js/validate.js')}}"></script>
+
+  <script src="{{url_for('static' ,filename='js/main.js')}}"></script>
+
+  <!-- jquery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <!-- owl carousel -->
+  <script src = "{{url_for('static' ,filename='js/owl.carousel.js')}}"></script>
+  <script src = "{{url_for('static' ,filename='js/scriptowl.js')}}"></script>
+
+</body>
+
+</html>

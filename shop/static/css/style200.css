@@ -1,0 +1,110 @@
+:root {
+    --background: #1a1a2e;
+    --color: #ffffff;
+    --primary-color: #0f3460;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    height: 100%;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    background: var(--background);
+    color: var(--color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+}
+
+.form-container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    backdrop-filter: blur(20px);
+    margin: 20px;
+    box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2);
+}
+
+header {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.fields-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.input-wrapper {
+    width: calc(50% - 10px);
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-success {
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color);
+    cursor: pointer;
+    margin-top: 20px; /* Add margin at the top */
+    border: none;
+    background-image: linear-gradient(45deg, var(--primary-color), #852d91);
+    border-radius: 50px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 15px 0 rgba(13, 26, 38, 0.3);
+}
+
+.btn-success:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 20px 0 rgba(13, 26, 38, 0.5);
+}
+
+.btn-success:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px 0 rgba(13, 26, 38, 0.4);
+}
+  box-shadow: 0 4px 15px 0 rgba(126, 52, 161, 0.75);
+}
+
+
+@media (max-width: 768px) {
+    .fields-group {
+        flex-direction: column;
+    }
+
+    .input-wrapper {
+        width: 100%;
+    }
+
+    .input-field,
+    .submit-button {
+        width: calc(100% - 20px); /* account for padding */
+    }
+}

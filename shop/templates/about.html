@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>VorteX</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{{url_for('static' ,filename='img/favicon.png')}}" rel="icon">
+  <link href="{{url_for('static' ,filename='img/apple-touch-icon.png')}}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{{url_for('static' ,filename='css/bootstrap.min.css')}}" rel="stylesheet">
+  <link href="{{url_for('static' ,filename='css/bootstrap-icons.css')}}" rel="stylesheet">
+  <link href="{{url_for('static' ,filename='css/aos.css')}}" rel="stylesheet">
+  <link href="{{url_for('static' ,filename='css/glightbox.min.css')}}" rel="stylesheet">
+  <link href="{{url_for('static' ,filename='css/swiper-bundle.min.css')}}" rel="stylesheet">
+  <link href="{{url_for('static' ,filename='css/remixicon.css')}}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{{url_for('static' ,filename='css/main.css')}}" rel="stylesheet">
+
+  
+</head>
+
+<body class="page-about">
+
+  <!-- ======= Header ======= -->
+ <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+
+      <a href="/" class="logo d-flex align-items-center">
+
+        <img src="{{url_for('static' ,filename='img/pngwing.com.png')}}" class="img-fluid" alt="" >
+      </a>
+
+      <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+      <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a href="/" class="active">Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/service">Forcast</a></li>
+          <li><a href="/products">Products</a></li>
+          <li><a href="/contact">contact</a></li>
+          {% if current_user.is_authenticated %}
+                <li><a href="{{url_for('customerLogout')}}">Log Out</a></li>
+          {% else %}
+                <li><a href="/customer/login">Log In</a></li>
+          {% endif %}
+          {% if current_user.is_authenticated %}
+          <li><a href="{{url_for('get_cart')}}">Cart({{session['shopcart']|length}})</a></li>
+          {% endif %}
+        </ul>
+
+      </nav>
+
+    </div>
+  </header><!-- End Header -->
+
+  <main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs d-flex align-items-center" style="background-image: url({{ url_for('static', filename='/img/about-header.jpg') }});">
+      <div class="container position-relative d-flex flex-column align-items-center">
+
+        <h2>About</h2>
+        <ol>
+          <li><a href="/">Home</a></li>
+          <li>About</li>
+        </ol>
+
+      </div>
+    </div><!-- End Breadcrumbs -->
+
+    <!-- ======= About Section ======= -->
+    <section id="about" class="about">
+      <div class="container" data-aos="fade-up">
+
+        <div class="row gy-4" data-aos="fade-up">
+          <div class="col-lg-4">
+            <img src="{{url_for('static' ,filename='img/about.jpg')}}" class="img-fluid" alt="">
+          </div>
+          <div class="col-lg-8">
+            <div class="content ps-lg-5">
+              <h3>About Wind Forcasting</h3>
+              <p>
+                we are driven by the power of the wind. Understanding wind patterns is not just a passion for us—it’s a commitment to providing accurate, actionable wind forecasts to those who rely on them. Our innovative platform is designed to offer real-time insights into wind conditions, helping everyone from maritime professionals to renewable energy experts make informed decisions based on precise data.
+              </p>
+              
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End About Section -->
+
+    <!-- ======= Why Choose Us Section ======= -->
+    <section id="why-us" class="why-us">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-header">
+          <h2>Why Choose Us</h2>
+
+        </div>
+
+        <div class="row g-0" data-aos="fade-up" data-aos-delay="200">
+
+          <div class="col-xl-5 img-bg" style="background-image: url({{ url_for('static', filename='img/why-us-bg.png')}}"></div>
+          <div class="col-xl-7 slides  position-relative">
+
+            <div class="slides-1 swiper">
+              <div class="swiper-wrapper">
+
+                <div class="swiper-slide">
+                  <div class="item">
+                    <h3 class="mb-3">Expertise</h3>
+                    <h2 class="mb-3"> Our team consists of skilled meteorologists, seasoned data analysts, and technology experts.</h2>
+                  
+                  </div>
+                </div><!-- End slide item -->
+
+                <div class="swiper-slide">
+                  <div class="item">
+                    <h3 class="mb-3">Precision:</h3>
+                    <h4 class="mb-3"></h4>
+                    <h2>Our cutting-edge algorithms ensure the highest accuracy in wind predictions.</h2>
+                  </div>
+                </div><!-- End slide item -->
+
+                <div class="swiper-slide">
+                  <div class="item">
+                    <h3 class="mb-3">User-Centric: </h3>
+                    <h2 class="mb-3">We continually enhance our platform based on user feedback and the evolving needs of our diverse user base.</h2>
+                    <p></p>
+                  </div>
+                </div><!-- End slide item -->
+
+                <div class="swiper-slide">
+                  <div class="item">
+                    <h3 class="mb-3">Accessibility</h3>
+                    <h2 class="mb-3">Our forecast data is presented in an easy-to-understand format, accessible anytime and on any device.</h2>
+                    <p></p>
+                  </div>
+                </div><!-- End slide item -->
+
+              </div>
+              <div class="swiper-pagination"></div>
+            </div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Why Choose Us Section -->
+
+    <!-- ======= Call To Action Section ======= -->
+    <section id="call-to-action" class="call-to-action">
+      <div class="container" data-aos="fade-up">
+        <div class="row justify-content-center">
+          <div class="col-lg-12 text-center">
+            <h3>Our Story</h3>
+            <p>Wind Forcasting began as a visionary project by a group of dedicated students at Tek-Up University. Fueled by our shared fascination with meteorology and a drive to make a tangible impact on the world, we embarked on a journey to demystify wind patterns and bring sophisticated forecasting to the fingertips of those who need it.
+
+              Our idea took shape within the university’s collaborative environment, where innovation is nurtured, and the free flow of information is encouraged. We recognized the potential of our project to serve a global audience and made the pivotal decision to extend our services beyond the university walls.
+              
+              Armed with knowledge, state-of-the-art tools, and an unwavering determination, we transformed Wind Forcasting from a student initiative into a community resource. Today, our platform stands as a testament to the power of academic collaboration, offering easy access to wind forecasts that inform, educate, and guide users worldwide.
+              
+              As we continue to grow and expand our services, our roots remain firmly planted in the academic soil that nourished our original vision. We invite you to join us on this exhilarating voyage as we strive to refine our forecasts and help more people harness the wind’s potential.</p>
+            <a class="cta-btn" href="/contact">Contact Us</a>
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End Call To Action Section -->
+
+    <!-- ======= Team Section ======= -->
+    <section id="team" class="team">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-header">
+          <h2>Our Team</h2>
+
+        </div>
+
+        <div class="row gy-4">
+
+          <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="team-member">
+              <div class="member-img">
+                <img src="{{url_for('static' ,filename='img/team/team-1.jpg')}}" class="img-fluid" alt="">
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Islem Harbeoui</h4>
+              </div>
+            </div>
+          </div><!-- End Team Member -->
+
+          <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="team-member">
+              <div class="member-img">
+                <img src="{{url_for('static' ,filename='img/team/team-2.jpg')}}" class="img-fluid" alt="">
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Nabil Dallegi</h4>
+              </div>
+            </div>
+          </div><!-- End Team Member -->
+
+          <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="team-member">
+              <div class="member-img">
+                <img src="{{url_for('static' ,filename='img/team/team-3.jpg')}}" class="img-fluid" alt="">
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Youssef Hamed</h4>
+              </div>
+            </div>
+          </div><!-- End Team Member -->
+
+          <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
+            <div class="team-member">
+              <div class="member-img">
+                <img src="{{url_for('static' ,filename='img/team/team-4.jpg')}}" class="img-fluid" alt="">
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Mouhamed Oussema Dakhli</h4>
+              </div>
+            </div>
+          </div><!-- End Team Member -->
+
+        </div>
+
+      </div>
+    </section><!-- End Team Section -->
+
+  </main><!-- End #main -->
+
+  <footer id="footer" class="footer">
+
+    <div class="footer-content">
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-lg-5 col-md-12 footer-info">
+            <a href="/" class="logo d-flex align-items-center">
+              <span>Wind Power Forcasting</span>
+            </a>
+            <p>Explore the world of wind power with our forecasting website! <br>
+              Our aim is to contribute to a cleaner future by providing reliable insights and solutions. 
+            <div class="social-links d-flex  mt-3">
+              <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+              <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+              <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+              <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bi bi-dash"></i> <a href="/">Home</a></li>
+              <li><i class="bi bi-dash"></i> <a href="/about">About us</a></li>
+              <li><i class="bi bi-dash"></i> <a href="/services">Services</a></li>
+              <li><i class="bi bi-dash"></i> <a href="/contact">Contact</a></li>
+            </ul>
+          </div>  
+
+          <div class="col-lg-2 col-6 footer-links">
+            <h4>Our Services</h4>
+            <ul>
+              <li><i class="bi bi-dash"></i> <a href="#">Power Wind <br> Equipement
+                Retail</a></li>
+              <li><i class="bi bi-dash"></i> <a href="#">Installation Service</a></li>
+              <li><i class="bi bi-dash"></i> <a href="#">Repair and Maintenance</a></li>
+              
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+            <h4>Contact Us</h4>
+            <p> Tek-Up
+                Ariana,<br>
+              Tunisia <br>
+              <strong>Phone:</strong> +216 25 488 535<br>
+              <strong>Email:</strong> Wind@tek-up.com<br>
+            </p>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-legal">
+      <div class="container">
+        <div class="copyright">
+          &copy; Copyright <strong><span>Wind Power Forcasting Group</span></strong>. All Rights Reserved
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="{{url_for('static' ,filename='js/bootstrap.bundle.min.js')}}"></script>
+  <script src="{{url_for('static' ,filename='js/aos.js')}}"></script>
+  <script src="{{url_for('static' ,filename='js/glightbox.min.js')}}"></script>
+  <script src="{{url_for('static' ,filename='js/swiper-bundle.min.js')}}"></script>
+  <script src="{{url_for('static' ,filename='js/isotope.pkgd.min.js')}}"></script>
+  <script src="{{url_for('static' ,filename='js//validate.js')}}"></script>
+
+  <!-- Template Main JS File -->
+  <script src="{{url_for('static' ,filename='js/main.js')}}"></script>
+
+</body>
+
+</html>

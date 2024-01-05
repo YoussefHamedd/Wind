@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>VorteX</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <link href="{{url_for('static' ,filename='img/favicon.png')}}"  rel="icon">
+
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{{url_for('static' ,filename='css/bootstrap.min.css')}}" rel="stylesheet">
+  <link href="{{url_for('static' ,filename='css/bootstrap-icons.css')}}" rel="stylesheet">
+  <link href="{{url_for('static' ,filename='css/aos.css" rel="stylesheet')}}">
+  <link href="{{url_for('static' ,filename='css/glightbox.min.css')}}" rel="stylesheet">
+  <link href="{{url_for('static' ,filename='css/swiper-bundle.min.css')}}" rel="stylesheet">
+  <link href="{{url_for('static' ,filename='css/remixicon.css')}}" rel="stylesheet">
+
+
+  <link href="{{url_for('static' ,filename='css/main.css')}}" rel="stylesheet">
+
+ <style>
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 200px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            margin-bottom: 20px;
+        }
+
+        canvas {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+
+
+
+</head>
+
+<body class="page-index">
+
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+
+      <a href="/" class="logo d-flex align-items-center">
+
+        <img src="{{url_for('static' ,filename='img/pngwing.com.png')}}" class="img-fluid" alt="" >
+      </a>
+
+      <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+      <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a href="/" class="active">Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/service">Forcast</a></li>
+          <li><a href="/products">Products</a></li>
+          <li><a href="/contact">contact</a></li>
+          {% if current_user.is_authenticated %}
+                <li><a href="{{url_for('customerLogout')}}">Log Out</a></li>
+          {% else %}
+                <li><a href="/customer/login">Log In</a></li>
+          {% endif %}
+          {% if current_user.is_authenticated %}
+          <li><a href="{{url_for('get_cart')}}">Cart({{session['shopcart']|length}})</a></li>
+          {% endif %}
+        </ul>
+            
+      </nav>
+
+    </div>
+  </header>
+
+   <main id="main">
+     <div class="breadcrumbs d-flex align-items-center" style="background-image:  url({{ url_for('static', filename='/img/services-header.jpg') }})">
+      <div class="container position-relative d-flex flex-column align-items-center">
+
+        <h2>Services</h2>
+        <ol>
+          <li><a href="/">Home</a></li>
+          <li>Services</li>
+        </ol>
+
+      </div>
+    </div>
+
+ <section>
+        <form id="locationForm">
+            <label for="latitude">Latitude:</label>
+            <input type="number" id="latitude" name="latitude" step="0.0001" required>
+
+            <label for="longitude">Longitude:</label>
+            <input type="number" id="longitude" name="longitude" step="0.0001" required>
+
+            <button type="button" onclick="getWindSpeedProgression()">Get Wind Speed Progression</button>
+        </form>
+
+        <div id="result"></div>
+        <canvas id="windChart" width="200" height="100" ></canvas>
+    </section>
+
+    <script>
+        function getWindSpeedProgression() {
+            const latitude = document.getElementById('latitude').value;
+            const longitude = document.getElementById('longitude').value;
+            const apiKey = 'YOUR_API_KEY'; // Replace with your Open-Meteo API key
+
+            const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=wind_speed_10m,wind_speed_80m,wind_speed_120m,wind_speed_180m&timezone=Europe/London&forecast_days=1&current_weather=true&timezone_aware=true&current_weather_aware=true&forecast_days_aware=true&timezone_offset_aware=true`;
+
+            fetch(apiUrl, {
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display wind speed information with latitude and longitude
+                const resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = `<p>Latitude: ${latitude}, Longitude: ${longitude}</p>`;
+
+                // Prepare data for chart
+                const timeLabels = data.hourly.time;
+                const windSpeed10m = data.hourly.wind_speed_10m;
+                const windSpeed80m = data.hourly.wind_speed_80m;
+                const windSpeed120m = data.hourly.wind_speed_120m;
+                const windSpeed180m = data.hourly.wind_speed_180m;
+
+                // Create chart
+                const ctx = document.getElementById('windChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: timeLabels,
+                        datasets: [
+                            {
+                                label: 'Wind Speed (10m)',
+                                data: windSpeed10m,
+                                borderColor: 'blue',
+                                borderWidth: 1,
+                                fill: false
+                            },
+                            {
+                                label: 'Wind Speed (80m)',
+                                data: windSpeed80m,
+                                borderColor: 'green',
+                                borderWidth: 1,
+                                fill: false
+                            },
+                            {
+                                label: 'Wind Speed (120m)',
+                                data: windSpeed120m,
+                                borderColor: 'orange',
+                                borderWidth: 1,
+                                fill: false
+                            },
+                            {
+                                label: 'Wind Speed (180m)',
+                                data: windSpeed180m,
+                                borderColor: 'red',
+                                borderWidth: 1,
+                                fill: false
+                            }
+                        ]
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching wind speed progression:', error));
+        }
+    </script>
+
+
+
+
+<section class="my-section">
+
+      <div class="container" >
+          <div id="booking" class="section" >
+		    <div class="section-center" >
+			    <div class="container">
+				    <div class="row">
+					    <div class="booking-form">
+                            <div>
+                                <h2 style="border:outset;font-family:Merriweather,serif;">Vortex ENERGY PREDICTOR</h2>
+                            </div>
+						        <form action="{{ url_for('predict')}}" method="post">
+							        <div class="row">
+								        <div class="col-md-3">
+									        <div class="form-group">
+										        <span class="form-label">Wind Speed</span>
+										        <input class="form-control" name="windspeed" type="number" required>
+									        </div>
+								        </div>
+								        <div class="col-md-2">
+									        <div class="form-group">
+										        <span class="form-label">Wind Blow Direction</span>
+										        <select class="form-control" name="wind direction" >
+											        <option>EAST</option>
+											        <option>WEST</option>
+											        <option>NORTH</option>
+                                                    <option>SOUTH</option>
+                                                    <option>NORTHEAST</option>
+                                                    <option>NORTHWEST</option>
+                                                    <option>SOUTHEAST</option>
+                                                    <option>SOUTHWEST</option>
+										        </select>
+										        <span class="select-arrow"></span>
+									        </div>
+								        </div>
+							        </div>
+							        <div class="row">
+								        <div class="col-md-3">
+									        <div class="form-btn">
+										        <button class="submit-btn">Show Results</button>
+									        </div>
+								        </div>
+							        </div>
+						        </form>
+                                <div class="mb-3">
+                                    <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3">{{ prediction_text }}</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3">{{ a }}</textarea>
+                                </div>
+					        </div>
+				    </div>
+			    </div>
+		    </div>
+          </div>
+      </div>
+    <style>
+        .my-section {
+            background-image: url({{ url_for('static', filename='/img/background.jpg') }}); /* Replace with the path to your image */
+            background-size: cover;
+            background-position: center;
+            height: 100vh; /* Set the height to 100% of the viewport height */
+            color: white; /* Set text color to be readable on the background */
+            text-align: center; /* Center text */
+            padding: 20px; /* Add padding for content */
+        }
+    </style>
+</section >
+
+   </main>
+    <!--
+    <section id="services-cards" class="services-cards">
+      <div class="container" data-aos="fade-up">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="card-item">
+              <div class="row">
+                <div class="col-xl-5">
+                  <div class="card-bg" style="background-image: url(assets/img/cards-1.jpg);"></div>
+                </div>
+                <div class="col-xl-7 d-flex align-items-center">
+                  <div class="card-body">
+                    <h4 class="card-title">Eligendi omnis sunt veritatis.</h4>
+                    <p>Fuga in dolorum et iste et culpa. Commodi possimus nesciunt modi voluptatem placeat deleniti adipisci. Cum delectus doloribus non veritatis. Officia temporibus illo magnam. Dolor eos et.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="card-item">
+              <div class="row">
+                <div class="col-xl-5">
+                  <div class="card-bg" style="background-image: url(assets/img/cards-2.jpg);"></div>
+                </div>
+                <div class="col-xl-7 d-flex align-items-center">
+                  <div class="card-body">
+                    <h4 class="card-title">Possimus ut sed velit assumenda</h4>
+                    <p>Sunt deserunt maiores voluptatem autem est rerum perferendis rerum blanditiis. Est laboriosam qui iste numquam laboriosam voluptatem architecto. Est laudantium sunt at quas aut hic. Eum dignissimos.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="card-item">
+              <div class="row">
+                <div class="col-xl-5">
+                  <div class="card-bg" style="background-image: url(assets/img/cards-3.jpg);"></div>
+                </div>
+                <div class="col-xl-7 d-flex align-items-center">
+                  <div class="card-body">
+                    <h4 class="card-title">Error beatae dolor inventore aut</h4>
+                    <p>Dicta porro nobis. Velit cum in. Nesciunt dignissimos enim molestiae facilis numquam quae quaerat ipsam omnis. Neque debitis ipsum at architecto officia laboriosam odit. Ut sunt temporibus nulla culpa.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
+            <div class="card-item">
+              <div class="row">
+                <div class="col-xl-5">
+                  <div class="card-bg" style="background-image: url(assets/img/cards-4.jpg);"></div>
+                </div>
+                <div class="col-xl-7 d-flex align-items-center">
+                  <div class="card-body">
+                    <h4 class="card-title">Expedita voluptas ut ut nesciunt</h4>
+                    <p>Aut est quidem doloremque voluptatem magnam quis excepturi vero quia. Eum eos doloremque architecto illo at beatae dolore. Fugiat suscipit et sint ratione dolores. Aut aliquid ea dolores libero nobis.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section> -->
+
+    
+
+
+
+
+
+
+  <footer id="footer" class="footer">
+
+    <div class="footer-content">
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-lg-5 col-md-12 footer-info">
+            <a href="/" class="logo d-flex align-items-center">
+              <span>Wind Power Forcasting</span>
+            </a>
+            <p>Explore the world of wind power with our forecasting website! <br>
+              Our aim is to contribute to a cleaner future by providing reliable insights and solutions. 
+            <div class="social-links d-flex  mt-3">
+              <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+              <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+              <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+              <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bi bi-dash"></i> <a href="/">Home</a></li>
+              <li><i class="bi bi-dash"></i> <a href="/about">About us</a></li>
+              <li><i class="bi bi-dash"></i> <a href="/services">Services</a></li>
+              <li><i class="bi bi-dash"></i> <a href="/contact">Contact</a></li>
+            </ul>
+          </div>  
+
+          <div class="col-lg-2 col-6 footer-links">
+            <h4>Our Services</h4>
+            <ul>
+              <li><i class="bi bi-dash"></i> <a href="#">Power Wind <br> Equipement
+                Retail</a></li>
+              <li><i class="bi bi-dash"></i> <a href="#">Installation Service</a></li>
+              <li><i class="bi bi-dash"></i> <a href="#">Repair and Maintenance</a></li>
+              
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+            <h4>Contact Us</h4>
+            <p> Tek-Up
+                Ariana,<br>
+              Tunisia <br>
+              <strong>Phone:</strong> +216 25 488 535<br>
+              <strong>Email:</strong> Wind@tek-up.com<br>
+            </p>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-legal">
+      <div class="container">
+        <div class="copyright">
+          &copy; Copyright <strong><span>Wind Power Forcasting Group</span></strong>. All Rights Reserved
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <div id="preloader"></div>
+
+ 
+  <script src="{{url_for('static' ,filename='js/bootstrap.bundle.min.js')}}"></script>
+  <script src="{{url_for('static' ,filename='js/aos.js')}}"></script>
+  <script src="{{url_for('static' ,filename='js/glightbox.min.js')}}"></script>
+  <script src="{{url_for('static' ,filename='js/swiper-bundle.min.js')}}"></script>
+  <script src="{{url_for('static' ,filename='js/isotope.pkgd.min.js')}}"></script>
+  <script src="{{url_for('static' ,filename='js/validate.js')}}"></script>
+
+  
+  <script src="{{url_for('static' ,filename='js/main.js')}}"></script>
+
+</body>
+
+</html>

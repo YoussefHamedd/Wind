@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style200.css')}}">
+    <title>Responsive Registration Form</title>
+</head>
+<body>
+    {% block body_block %}
+    {% from '_formhelpers.html' import render_field %}
+    <section class="container">
+        <div class="login-container">
+            <div class="circle circle-one"></div>
+            <div class="form-container">
+                <header>Register</header>
+                <form action="#" method="POST">
+                    {{ form.csrf_token }}
+
+                    <div class="details personal">
+                        <h2 class="title">Personal Details</h2>
+                        <div class="fields">
+                            {{ render_field(form.name, class="input-field", placeholder="Enter your name", required="required") }}
+                            {{ render_field(form.username, class="input-field", placeholder="Enter username", required="required") }}
+                            {{ render_field(form.email, class="input-field", placeholder="Enter your email", required="required") }}
+                            {{ render_field(form.password, type="password", class="input-field", placeholder="Password", required="required") }}
+                            {{ render_field(form.confirm, type="password", class="input-field", placeholder="Confirm password", required="required") }}
+                        </div>
+                    </div>
+
+                    <div class="details ID">
+                        <h2 class="title">Identity Details</h2>
+                        <div class="fields">
+                            {{ render_field(form.country, class="input-field", placeholder="Enter country", required="required") }}
+                            {{ render_field(form.state, class="input-field", placeholder="Enter state", required="required") }}
+                            {{ render_field(form.city, class="input-field", placeholder="Enter city", required="required") }}
+                            {{ render_field(form.contact, class="input-field", placeholder="Enter contact", required="required") }}
+                            {{ render_field(form.address, class="input-field", placeholder="Enter address", required="required") }}
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Register</button>
+                </form>
+            </div>
+            <div class="circle circle-two"></div>
+        </div>
+    </section>
+    {% endblock body_block %}
+
+    <script src="{{ url_for('static', filename='js/script11.js') }}"></script>
+</body>
+</html>
